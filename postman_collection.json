@@ -1,0 +1,212 @@
+{
+  "info": {
+    "name": "API DEV - Etxplore API",
+    "description": "Postman collection for the Express/Mongoose Etxplore API. Auth uses JWT in Authorization header. Import this with the matching environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "c5c6f1cf-6c44-4b7c-b1c6-collection"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/signup", "host": ["{{baseUrl}}"], "path": ["users","signup"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\",\n  \"passwordConfirm\": \"{{userPassword}}\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  var data = pm.response.json();",
+                  "  if (data && data.token) { pm.environment.set('jwt', data.token); }",
+                  "} catch(e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/login", "host": ["{{baseUrl}}"], "path": ["users","login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {",
+                  "  var data = pm.response.json();",
+                  "  if (data && data.token) { pm.environment.set('jwt', data.token); }",
+                  "} catch(e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/forgotPassword", "host": ["{{baseUrl}}"], "path": ["users","forgotPassword"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/resetPassword/{{resetToken}}", "host": ["{{baseUrl}}"], "path": ["users","resetPassword","{{resetToken}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"{{newPassword}}\",\n  \"passwordConfirm\": \"{{newPassword}}\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try { var data = pm.response.json(); if (data && data.token) pm.environment.set('jwt', data.token); } catch(e) {}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users (me)",
+      "item": [
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ],
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users","me"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Me (name/email)",
+          "request": {
+            "method": "PATCH",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users/updateMe", "host": ["{{baseUrl}}"], "path": ["users","updateMe"] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"{{userEmail}}\"\n}" }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Password",
+          "request": {
+            "method": "PATCH",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "url": { "raw": "{{baseUrl}}/users/updateMyPassword", "host": ["{{baseUrl}}"], "path": ["users","updateMyPassword"] },
+            "body": { "mode": "raw", "raw": "{\n  \"passwordCurrent\": \"{{userPassword}}\",\n  \"password\": \"{{newPassword}}\",\n  \"passwordConfirm\": \"{{newPassword}}\"\n}" }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Me",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ],
+            "url": { "raw": "{{baseUrl}}/users/deleteMe", "host": ["{{baseUrl}}"], "path": ["users","deleteMe"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users (admin)",
+      "item": [
+        {
+          "name": "List Users",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" } ], "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] } },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" } ], "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users","{{userId}}"] } },
+          "response": []
+        },
+        {
+          "name": "Update User (admin)",
+          "request": { "method": "PATCH", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users","{{userId}}"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"Admin Updated\"\n}" } },
+          "response": []
+        },
+        {
+          "name": "Delete User (admin)",
+          "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" } ], "url": { "raw": "{{baseUrl}}/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["users","{{userId}}"] } },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tours",
+      "item": [
+        { "name": "Get All Tours", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours", "host": ["{{baseUrl}}"], "path": ["tours"] } }, "response": [] },
+        { "name": "Top 5 Cheap", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours/top-5-cheap", "host": ["{{baseUrl}}"], "path": ["tours","top-5-cheap"] } }, "response": [] },
+        { "name": "Tour Stats", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours/tour-stats", "host": ["{{baseUrl}}"], "path": ["tours","tour-stats"] } }, "response": [] },
+        { "name": "Monthly Plan (Protected)", "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" } ], "url": { "raw": "{{baseUrl}}/tours/monthly-plan/{{year}}", "host": ["{{baseUrl}}"], "path": ["tours","monthly-plan","{{year}}"] } }, "response": [] },
+        { "name": "Tours Within", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours/tours-within/{{distance}}/center/{{latlng}}/unit/{{unit}}", "host": ["{{baseUrl}}"], "path": ["tours","tours-within","{{distance}}","center","{{latlng}}","unit","{{unit}}"] } }, "response": [] },
+        { "name": "Distances", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours/distances/{{latlng}}/unit/{{unit}}", "host": ["{{baseUrl}}"], "path": ["tours","distances","{{latlng}}","unit","{{unit}}"] } }, "response": [] },
+        { "name": "Create Tour (admin/lead-guide)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/tours", "host": ["{{baseUrl}}"], "path": ["tours"] }, "body": { "mode": "raw", "raw": "{\n  \"name\": \"The Forest Hiker XXX\",\n  \"duration\": 5,\n  \"maxGroupSize\": 25,\n  \"difficulty\": \"easy\",\n  \"price\": 397,\n  \"summary\": \"Breathtaking hike through the Canadian Banff National Park\",\n  \"description\": \"...\",\n  \"imageCover\": \"tour-1-cover.jpg\",\n  \"startDates\": [\"2022-04-25\", \"2022-07-20\"]\n}" } }, "response": [] },
+        { "name": "Get Tour by ID", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/tours/{{tourId}}", "host": ["{{baseUrl}}"], "path": ["tours","{{tourId}}"] } }, "response": [] },
+        { "name": "Update Tour (admin/lead-guide)", "request": { "method": "PATCH", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/tours/{{tourId}}", "host": ["{{baseUrl}}"], "path": ["tours","{{tourId}}"] }, "body": { "mode": "raw", "raw": "{\n  \"price\": 499\n}" } }, "response": [] },
+        { "name": "Delete Tour (admin/lead-guide)", "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{adminJwt}}" } ], "url": { "raw": "{{baseUrl}}/tours/{{tourId}}", "host": ["{{baseUrl}}"], "path": ["tours","{{tourId}}"] } }, "response": [] }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        { "name": "Get All Reviews (protected)", "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ], "url": { "raw": "{{baseUrl}}/reviews", "host": ["{{baseUrl}}"], "path": ["reviews"] } }, "response": [] },
+        { "name": "Create Review (user)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/reviews", "host": ["{{baseUrl}}"], "path": ["reviews"] }, "body": { "mode": "raw", "raw": "{\n  \"review\": \"Great tour!\",\n  \"rating\": 5,\n  \"tour\": \"{{tourId}}\"\n}" } }, "response": [] },
+        { "name": "Get Review by ID (protected)", "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ], "url": { "raw": "{{baseUrl}}/reviews/{{reviewId}}", "host": ["{{baseUrl}}"], "path": ["reviews","{{reviewId}}"] } }, "response": [] },
+        { "name": "Update Review (user/admin)", "request": { "method": "PATCH", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/reviews/{{reviewId}}", "host": ["{{baseUrl}}"], "path": ["reviews","{{reviewId}}"] }, "body": { "mode": "raw", "raw": "{\n  \"review\": \"Updated review text\",\n  \"rating\": 4\n}" } }, "response": [] },
+        { "name": "Delete Review (user/admin)", "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ], "url": { "raw": "{{baseUrl}}/reviews/{{reviewId}}", "host": ["{{baseUrl}}"], "path": ["reviews","{{reviewId}}"] } }, "response": [] },
+        { "name": "Create Review for Tour (nested)", "request": { "method": "POST", "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" }, { "key": "Content-Type", "value": "application/json" } ], "url": { "raw": "{{baseUrl}}/tours/{{tourId}}/reviews", "host": ["{{baseUrl}}"], "path": ["tours","{{tourId}}","reviews"] }, "body": { "mode": "raw", "raw": "{\n  \"review\": \"Awesome!\",\n  \"rating\": 5\n}" } }, "response": [] }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": []
+}
+
+
