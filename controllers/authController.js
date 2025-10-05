@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -49,13 +49,8 @@ exports.signup = catchAsync(async (req, res, next) => {
   await newUser.save({ validateBeforeSave: false });
 
   const verifyURL = `http://localhost:8080/verify-email/${verificationToken}`;
-  const verifyMessage = `Welcome! Please verify your email by visiting: ${verifyURL}`;
   try {
-    await sendEmail({
-      email: newUser.email,
-      subject: 'Email verification',
-      message: verifyMessage
-    });
+    await new Email(newUser, verifyURL).sendEmailVerification();
   } catch (err) {
     // If email fails, we don't block signup but log error
     console.error('Error sending verification email', err);
@@ -166,14 +161,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // Use frontend reset URL
   const resetURL = `http://localhost:8080/reset-password/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
-
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token (valid for 10 min)',
-      message
-    });
+    await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
@@ -239,6 +228,15 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
   user.emailVerificationToken = undefined;
   user.emailVerificationExpires = undefined;
   await user.save({ validateBeforeSave: false });
+
+  // Send welcome email after successful verification
+  try {
+    const welcomeURL = `http://localhost:8080/tours`; // Redirect to tours page
+    await new Email(user, welcomeURL).sendWelcome();
+  } catch (err) {
+    // If welcome email fails, don't block verification but log error
+    console.error('Error sending welcome email', err);
+  }
 
   res.status(200).json({ status: 'success', message: 'Email verified' });
 });

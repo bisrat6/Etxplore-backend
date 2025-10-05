@@ -1,0 +1,94 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title= subject
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        color: #2d5a3d;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 16px;
+      }
+      .content {
+        margin-bottom: 30px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #2d5a3d;
+        color: white;
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .button:hover {
+        background-color: #1e3e2a;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+        font-size: 14px;
+      }
+  body
+    .container
+      .header
+        .logo Etxplore
+        .subtitle Discover the Beauty of Ethiopia
+      
+      .content
+        h2 Welcome to Etxplore, #{firstName}!
+        
+        p We're thrilled to have you join our community of Ethiopian adventure seekers. Etxplore is your gateway to discovering the rich culture, stunning landscapes, and incredible experiences that Ethiopia has to offer.
+        
+        p With your account, you can:
+        ul
+          li Browse our curated collection of tours
+          li Book your dream Ethiopian adventure
+          li Read and write reviews about your experiences
+          li Connect with fellow travelers
+        
+        p Ready to start your journey? Click the button below to explore our tours:
+        
+        .text-center
+          a.button(href=url) Explore Tours
+        
+        p If you have any questions or need assistance, feel free to reach out to our support team.
+        
+        p Happy exploring!
+        p The Etxplore Team
+      
+      .footer
+        p This email was sent to #{to}
+        p © 2024 Etxplore. All rights reserved.
+        p 
+          | If you didn't create an account with us, please ignore this email.

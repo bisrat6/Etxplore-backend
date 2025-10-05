@@ -13,8 +13,71 @@ exports.aliasTopTours = (req, res, next) => {
 exports.getAllTours = factory.getAll(Tour);
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.createTour = factory.createOne(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+
+exports.updateTour = catchAsync(async (req, res, next) => {
+  // If user is lead-guide, check if they are assigned to this tour
+  if (req.user.role === 'lead-guide') {
+    const tour = await Tour.findById(req.params.id);
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
+    
+    const isAssignedToTour = tour.guides.some(guide => 
+      guide._id.toString() === req.user.id.toString()
+    );
+    
+    if (!isAssignedToTour) {
+      return next(new AppError('You can only update tours you are assigned to', 403));
+    }
+  }
+  
+  // Proceed with normal update
+  const doc = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc
+    }
+  });
+});
+
+exports.deleteTour = catchAsync(async (req, res, next) => {
+  // If user is lead-guide, check if they are assigned to this tour
+  if (req.user.role === 'lead-guide') {
+    const tour = await Tour.findById(req.params.id);
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
+    
+    const isAssignedToTour = tour.guides.some(guide => 
+      guide._id.toString() === req.user.id.toString()
+    );
+    
+    if (!isAssignedToTour) {
+      return next(new AppError('You can only delete tours you are assigned to', 403));
+    }
+  }
+  
+  // Proceed with normal delete
+  const doc = await Tour.findByIdAndDelete(req.params.id);
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
