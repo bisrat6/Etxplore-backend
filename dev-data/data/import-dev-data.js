@@ -1,24 +1,27 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
 const Tour = require('./../../models/tourModel');
 const Review = require('./../../models/reviewModel');
 const User = require('./../../models/userModel');
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: path.join(__dirname, '..', '..', 'config.env') });
 
-// const DB = process.env.DATABASE.replace(
-//   '<PASSWORD>',
-//   process.env.DATABASE_PASSWORD
-// );
+// Prefer hosted DATABASE, fall back to local
+const DB = process.env.DATABASE || process.env.DATABASE_LOCAL;
 
 mongoose
-  .connect(process.env.DATABASE_LOCAL, {
+  .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false
   })
-  .then(() => console.log('DB connection successful!'));
+  .then(() => console.log('DB connection successful!'))
+  .catch(err => {
+    console.error('DB connection error:', err);
+    process.exit(1);
+  });
 
 // READ JSON FILE
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));

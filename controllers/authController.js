@@ -48,12 +48,19 @@ exports.signup = catchAsync(async (req, res, next) => {
   const verificationToken = newUser.createEmailVerificationToken();
   await newUser.save({ validateBeforeSave: false });
 
-  const verifyURL = `http://localhost:8080/verify-email/${verificationToken}`;
+  // Build frontend verify URL from FRONTEND_URL env var or fall back to localhost dev server
+  const frontendBase = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.replace(/\/$/, '')
+    : 'http://localhost:8080';
+  const verifyURL = `${frontendBase}/verify-email/${verificationToken}`;
   try {
     await new Email(newUser, verifyURL).sendEmailVerification();
   } catch (err) {
-    // If email fails, we don't block signup but log error
-    console.error('Error sending verification email', err);
+    // If email fails, we don't block signup but log error in non-production
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Error sending verification email', err);
+    }
   }
 
   // Do not auto-login on signup; require email verification first
@@ -158,8 +165,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
-  // Use frontend reset URL
-  const resetURL = `http://localhost:8080/reset-password/${resetToken}`;
+  // Use frontend reset URL built from FRONTEND_URL or fallback
+  const resetFrontend = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.replace(/\/$/, '')
+    : 'http://localhost:8080';
+  const resetURL = `${resetFrontend}/reset-password/${resetToken}`;
 
   try {
     await new Email(user, resetURL).sendPasswordReset();
@@ -231,11 +241,17 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
 
   // Send welcome email after successful verification
   try {
-    const welcomeURL = `http://localhost:8080/tours`; // Redirect to tours page
+    const welcomeBase = process.env.FRONTEND_URL
+      ? process.env.FRONTEND_URL.replace(/\/$/, '')
+      : 'http://localhost:8080';
+    const welcomeURL = `${welcomeBase}/tours`; // Redirect to tours page
     await new Email(user, welcomeURL).sendWelcome();
   } catch (err) {
-    // If welcome email fails, don't block verification but log error
-    console.error('Error sending welcome email', err);
+    // If welcome email fails, don't block verification but log error in non-production
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Error sending welcome email', err);
+    }
   }
 
   res.status(200).json({ status: 'success', message: 'Email verified' });

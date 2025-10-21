@@ -10,14 +10,16 @@
 
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
 const User = require('../models/userModel');
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
 
-const DB = process.env.DATABASE_LOCAL;
+// Prefer hosted DATABASE, fall back to local
+const DB = process.env.DATABASE || process.env.DATABASE_LOCAL;
 
 if (!DB) {
-  console.error('DATABASE_LOCAL not set in config.env');
+  console.error('DATABASE or DATABASE_LOCAL not set in config.env');
   process.exit(1);
 }
 

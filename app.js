@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -18,12 +19,32 @@ const app = express();
 
 // 1) GLOBAL MIDDLEWARES
 // Enable CORS
-app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:8080'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
+// Configure CORS origins from FRONTEND_URL (comma-separated) or fall back to common localhost dev origins
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
+  : [
+      'http://localhost:8080',
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'http://127.0.0.1:8080'
+    ];
+
+app.use(
+  cors({
+    origin: function(origin, callback) {
+      // Allow requests with no origin like mobile apps or curl
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS policy: This origin is not allowed.'));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  })
+);
 
 // Set security HTTP headers
 app.use(helmet());
@@ -36,7 +57,7 @@ if (process.env.NODE_ENV === 'development') {
 // Limit requests from same API
 const limiter = rateLimit({
   max: 1000,
-  windowMs: 60 * 60 * 1000,
+  windowMs: 60 * 60 * 100,
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
@@ -64,8 +85,11 @@ app.use(
   })
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
+// Serving static files only if the public directory exists (safe for split-host deployments)
+const publicDir = `${__dirname}/public`;
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
+}
 
 // Test middleware
 app.use((req, res, next) => {

@@ -7,17 +7,19 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Etxplore <${process.env.EMAIL_FROM || 'noreply@etxplore.com'}>`;
+    this.from = `Etxplore <${process.env.EMAIL_FROM ||
+      'noreply@etxplore.com'}>`;
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      // Sendgrid
+      // Brevo (Sendinblue) API Transport
       return nodemailer.createTransport({
-        service: 'SendGrid',
+        host: process.env.BREVO_HOST, // smtp-relay.brevo.com
+        port: process.env.BREVO_PORT, // 587
         auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD
+          user: process.env.BREVO_USERNAME, // e.g. 98ac79001@smtp-brevo.com 
+          pass: process.env.BREVO_PASSWORD // your Brevo SMTP password
         }
       });
     }
@@ -66,9 +68,6 @@ module.exports = class Email {
   }
 
   async sendEmailVerification() {
-    await this.send(
-      'emailVerification',
-      'Please verify your email address'
-    );
+    await this.send('emailVerification', 'Please verify your email address');
   }
 };

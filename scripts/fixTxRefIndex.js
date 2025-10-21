@@ -4,10 +4,25 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
 
-const url = process.env.DATABASE_LOCAL || 'mongodb://localhost:27017';
-const dbName =
-  (process.env.DATABASE_LOCAL && process.env.DATABASE_LOCAL.split('/').pop()) ||
-  'etxplore';
+// Prefer hosted DATABASE, fall back to local
+const rawConn =
+  process.env.DATABASE ||
+  process.env.DATABASE_LOCAL ||
+  'mongodb://localhost:27017/etxplore';
+
+// Extract base URL (without DB) for MongoClient and DB name
+let url = rawConn;
+let dbName = 'etxplore';
+try {
+  // If connection string contains a database portion after the last '/', separate it
+  const lastSlash = rawConn.lastIndexOf('/');
+  if (lastSlash !== -1 && lastSlash < rawConn.length - 1) {
+    url = rawConn.slice(0, lastSlash);
+    dbName = rawConn.slice(lastSlash + 1).split('?')[0];
+  }
+} catch (e) {
+  // fallback defaults already set
+}
 
 (async function fixIndex() {
   const client = new MongoClient(url, {

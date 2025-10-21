@@ -16,9 +16,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   // 3️⃣ Chapa API payload (use nested objects for customization/meta)
   const chapaUrl = 'https://api.chapa.co/v1/transaction/initialize';
-  const returnUrl = process.env.FRONTEND_URL
-    ? `${process.env.FRONTEND_URL.replace(/\/$/, '')}/my-bookings`
-    : `http://localhost:8080/my-bookings`; // default to frontend dev server so Chapa redirects correctly
+  const frontendBase = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.replace(/\/$/, '')
+    : 'http://localhost:8080';
+  const returnUrl = `${frontendBase}/my-bookings`;
 
   const payload = {
     amount: String(tour.price), // Chapa expects string amount
@@ -62,7 +63,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     });
     const { data } = response;
     if (data.status !== 'success') {
-      console.error('Chapa API Error:', data);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Chapa API Error:', data);
+      }
       return next(
         new AppError(data.message || 'Chapa failed to initialize payment', 400)
       );
@@ -77,7 +81,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   } catch (err) {
     const respData =
       err && err.response && err.response.data ? err.response.data : null;
-    console.error('Chapa Error:', respData || (err && err.message) || err);
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Chapa Error:', respData || (err && err.message) || err);
+    }
     return next(new AppError('Payment initialization failed', 400));
   }
 });
@@ -155,10 +162,13 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
   } catch (err) {
     const respData =
       err && err.response && err.response.data ? err.response.data : null;
-    console.error(
-      'Chapa verification error:',
-      respData || (err && err.message) || err
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Chapa verification error:',
+        respData || (err && err.message) || err
+      );
+    }
     return next(new AppError('Verification failed', 400));
   }
 });

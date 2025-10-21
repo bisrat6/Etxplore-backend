@@ -1,8 +1,8 @@
 [
   {
     "_id": "5c8a1d5b0190b214360dc057",
-    "name": "Jonas Schmedtmann",
-    "email": "admin@natours.io",
+    "name": "Bisrat Beriso",
+    "email": "bisratberiso@gmail.com",
     "role": "admin",
     "active": true,
     "photo": "user-1.jpg",
@@ -37,8 +37,8 @@
   },
   {
     "_id": "5c8a1f292f8fb814b56fa184",
-    "name": "Leo Gillespie",
-    "email": "leo@example.com",
+    "name": "Bekele Tesfaye",
+    "email": "bekele.tesfaye@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-5.jpg",
@@ -46,8 +46,8 @@
   },
   {
     "_id": "5c8a1f4e2f8fb814b56fa185",
-    "name": "Jennifer Hardy",
-    "email": "jennifer@example.com",
+    "name": "Selamawit Bekele",
+    "email": "selamawit.bekele@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-6.jpg",
@@ -55,8 +55,8 @@
   },
   {
     "_id": "5c8a201e2f8fb814b56fa186",
-    "name": "Kate Morrison",
-    "email": "kate@example.com",
+    "name": "Lulit Desta",
+    "email": "lulit.desta@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-7.jpg",
@@ -82,8 +82,8 @@
   },
   {
     "_id": "5c8a21d02f8fb814b56fa189",
-    "name": "Steve T. Scaife",
-    "email": "steve@example.com",
+    "name": "Haile Tadesse",
+    "email": "haile.tadesse@example.com",
     "role": "lead-guide",
     "active": true,
     "photo": "user-10.jpg",
@@ -91,8 +91,8 @@
   },
   {
     "_id": "5c8a21f22f8fb814b56fa18a",
-    "name": "Aarav Lynn",
-    "email": "aarav@example.com",
+    "name": "Abebe Mekonnen",
+    "email": "abebe.mekonnen@example.com",
     "role": "lead-guide",
     "active": true,
     "photo": "user-11.jpg",
@@ -100,8 +100,8 @@
   },
   {
     "_id": "5c8a22c62f8fb814b56fa18b",
-    "name": "Miyah Myles",
-    "email": "miyah@example.com",
+    "name": "Muluwork Solomon",
+    "email": "muluwork.solomon@example.com",
     "role": "lead-guide",
     "active": true,
     "photo": "user-12.jpg",
@@ -109,8 +109,8 @@
   },
   {
     "_id": "5c8a23412f8fb814b56fa18c",
-    "name": "Ben Hadley",
-    "email": "ben@example.com",
+    "name": "Kebede Demissie",
+    "email": "kebede.demissie@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-13.jpg",
