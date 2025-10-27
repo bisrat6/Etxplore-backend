@@ -11,11 +11,11 @@ module.exports = class Email {
   }
 
   newTransport() {
-    // Gmail SMTP configuration with explicit settings
+    // Try port 465 with SSL for better compatibility with Railway
     return nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // true for 465, false for other ports
+      port: 465,
+      secure: true, // true for 465, false for 587
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD
