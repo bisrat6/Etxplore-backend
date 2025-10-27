@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -17,6 +18,9 @@ const reviewRouter = require('./routes/reviewRoutes');
 const app = express();
 
 // 1) GLOBAL MIDDLEWARES
+// Enable CORS - Allow all origins
+app.use(cors());
+
 // Set security HTTP headers
 app.use(helmet());
 
