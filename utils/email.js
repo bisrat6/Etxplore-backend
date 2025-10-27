@@ -7,29 +7,16 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Etxplore <${process.env.EMAIL_FROM ||
-      'noreply@etxplore.com'}>`;
+    this.from = process.env.EMAIL_FROM || 'noreply@etxplore.com';
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
-      // Brevo (Sendinblue) API Transport
-      return nodemailer.createTransport({
-        host: process.env.BREVO_HOST, // smtp-relay.brevo.com
-        port: process.env.BREVO_PORT, // 587
-        auth: {
-          user: process.env.BREVO_USERNAME, // e.g. 98ac79001@smtp-brevo.com 
-          pass: process.env.BREVO_PASSWORD // your Brevo SMTP password
-        }
-      });
-    }
-
+    // Gmail SMTP configuration
     return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
       }
     });
   }
@@ -43,17 +30,25 @@ module.exports = class Email {
       subject
     });
 
-    // 2) Define email options
-    const mailOptions = {
-      from: this.from,
-      to: this.to,
-      subject,
-      html,
-      text: htmlToText.convert(html)
-    };
-
-    // 3) Create a transport and send email
-    await this.newTransport().sendMail(mailOptions);
+    // 2) Send email using Gmail via Nodemailer
+    try {
+      const mailOptions = {
+        from: `"Etxplore" <${this.from}>`,
+        to: this.to,
+        subject,
+        html,
+        text: htmlToText.convert(html)
+      };
+      
+      const info = await this.newTransport().sendMail(mailOptions);
+      
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('✅ Email sent successfully:', info.messageId);
+      }
+    } catch (error) {
+      console.error('❌ Email sending failed:', error.message);
+      throw error;
+    }
   }
 
   async sendWelcome() {

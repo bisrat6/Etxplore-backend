@@ -9,12 +9,12 @@
     "ratingsAverage": 4.8,
     "ratingsQuantity": 6,
     "summary": "Discover the scenic beauty of Ethiopian highlands",
-    "description": "Explore the majestic mountains, valleys, and lakes of Ethiopia. Enjoy local culture, stunning landscapes, and historical sites.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Ethiopian_Highlands_01.jpg",
+    "description": "Embark on an incredible journey through the stunning Ethiopian Highlands, starting from the bustling capital of Addis Ababa. Experience breathtaking mountain vistas, pristine valleys, and magnificent lakes that define Ethiopia's natural beauty. Discover traditional villages where ancient cultures thrive, encounter local artisans showcasing centuries-old crafts, and immerse yourself in the warm hospitality of highland communities. This tour takes you to sacred monasteries, offers opportunities for bird watching in lush valleys, and includes visits to historical sites that tell the story of Ethiopia's rich past. Perfect for those seeking a blend of natural beauty, cultural immersion, and authentic experiences in one of Africa's most captivating highland regions.",
+    "imageCover": "highland1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Ethiopian_Highlands_01.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Ethiopian_Highlands_01.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Ethiopian_Highlands_01.jpg"
+      "highlands2.jpg",
+      "highlands3.jpg",
+      "highlands4.jpg"
     ],
     "startLocation": {
       "description": "Addis Ababa, Ethiopia",
@@ -58,18 +58,18 @@
     "ratingsAverage": 5,
     "ratingsQuantity": 9,
     "summary": "Explore the rock-hewn churches of Lalibela",
-    "description": "Visit Ethiopia's famous UNESCO World Heritage site and learn about its history and culture.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Bete_Medhane_Alem_in_Lalibela.JPG",
+    "description": "Journey from Addis Ababa to the extraordinary UNESCO World Heritage site of Lalibela, often called the 'Eighth Wonder of the World.' Marvel at the 11 monolithic churches carved directly from solid rock by the Zagwe dynasty in the 12th and 13th centuries. Each church is a masterpiece of engineering and artistry, connected by intricate passageways and tunnels. Witness ancient religious ceremonies still practiced today, explore the underground tunnels between churches, and learn about the spiritual significance of these architectural marvels. Visit the famous Bete Giyorgis, the most iconic cross-shaped church, and experience the unique atmosphere of this sacred pilgrimage site. This tour offers a profound insight into Ethiopian Orthodox Christianity and the incredible craftsmanship of medieval Ethiopian builders.",
+    "imageCover": "lalibela1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bete_Medhane_Alem_in_Lalibela.JPG",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bete_Medhane_Alem_in_Lalibela.JPG",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bete_Medhane_Alem_in_Lalibela.JPG"
+      "lalibela2.jpg",
+      "lalibela3.jpg",
+      "lalibela4.jpg"
     ],
     "startLocation": {
-      "description": "Lalibela, Ethiopia",
+      "description": "Addis Ababa, Ethiopia",
       "type": "Point",
-      "coordinates": [39.0311, 12.0312],
-      "address": "Lalibela, Ethiopia"
+      "coordinates": [38.7469, 9.0303],
+      "address": "Addis Ababa, Ethiopia"
     },
     "startDates": ["2025-11-05T09:00:00.000Z", "2025-12-10T09:00:00.000Z"],
     "guides": ["5c8a21d02f8fb814b56fa189", "5c8a201e2f8fb814b56fa186"],
@@ -100,18 +100,18 @@
     "ratingsAverage": 4.5,
     "ratingsQuantity": 6,
     "summary": "Trek the breathtaking Simien Mountains",
-    "description": "Experience stunning landscapes, wildlife, and challenging trekking paths in northern Ethiopia.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/SemienWaterfall.jpg",
+    "description": "Depart from Addis Ababa and journey north to the Simien Mountains National Park, Ethiopia's premier trekking destination and a UNESCO World Heritage site. Known as the 'Roof of Africa,' these dramatic mountains feature jagged peaks, plunging valleys, and breathtaking escarpments. Trek through alpine grasslands where you'll encounter endemic wildlife including the magnificent Gelada baboon with their distinctive red chests, the endangered Ethiopian wolf, and the iconic Walia ibex. Camp under star-filled African skies, witness spectacular sunrise views from mountain peaks, and hike through pristine wilderness areas. The Simien Mountains offer some of Africa's most spectacular trekking with trails ranging from moderate day walks to challenging multi-day expeditions. Experience traditional village life, enjoy the hospitality of mountain communities, and capture unforgettable photos of this truly unique highland ecosystem.",
+    "imageCover": "semen1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/SemienWaterfall.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/SemienWaterfall.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/SemienWaterfall.jpg"
+      "semen2.jpg",
+      "semen3.jpg",
+      "semen4.jpg"
     ],
     "startLocation": {
-      "description": "Gondar, Ethiopia",
+      "description": "Addis Ababa, Ethiopia",
       "type": "Point",
-      "coordinates": [37.4667, 12.6],
-      "address": "Gondar, Ethiopia"
+      "coordinates": [38.7469, 9.0303],
+      "address": "Addis Ababa, Ethiopia"
     },
     "startDates": ["2025-11-15T09:00:00.000Z", "2025-12-20T09:00:00.000Z"],
     "guides": ["5c8a21d02f8fb814b56fa189", "5c8a23412f8fb814b56fa18c"],
@@ -142,12 +142,12 @@
     "ratingsAverage": 4.7,
     "ratingsQuantity": 7,
     "summary": "Explore the stunning lakes of Ethiopia's Rift Valley",
-    "description": "Visit the beautiful lakes of Ziway, Langano, and Awassa while enjoying local culture and scenery.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Tana,_Ethiopia.jpg",
+    "description": "Starting from Addis Ababa, embark on a scenic journey through the Ethiopian Rift Valley, a geological marvel that cuts through the heart of the country. Explore a chain of stunning lakes, each with its unique character and ecosystem. Lake Ziway dazzles with its abundant birdlife and hippos basking in the shallows. Lake Langano offers pristine beaches perfect for swimming and relaxation, with its reddish-brown waters providing a unique visual experience. Lake Awassa captivates with its peaceful atmosphere and excellent bird watching opportunities. Along the way, enjoy traditional fish markets where locals sell freshly caught tilapia, visit local communities practicing time-honored crafts, and witness the vibrant colors of Ethiopian life. The Rift Valley lakes region is a paradise for birdwatchers, with over 400 bird species including flamingos, pelicans, and countless others. This tour combines natural beauty, wildlife observation, and cultural experiences in one unforgettable adventure.",
+    "imageCover": "valley1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Tana,_Ethiopia.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Tana,_Ethiopia.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Tana,_Ethiopia.jpg"
+      "valley2.jpg",
+      "valley3.jpg",
+      "valley4.jpg"
     ],
     "startLocation": {
       "description": "Addis Ababa, Ethiopia",
@@ -191,18 +191,18 @@
     "ratingsAverage": 4.6,
     "ratingsQuantity": 5,
     "summary": "Walk through the historic city of Axum",
-    "description": "Discover the ancient obelisks, churches, and ruins of Ethiopia's historic city Axum.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Stela_aksum.jpg",
+    "description": "Travel from Addis Ababa to the ancient city of Axum, the former capital of one of the world's earliest known civilizations. Discover towering granite obelisks that have stood for over 2,000 years, some reaching heights of over 30 meters. Explore the archaeological ruins of the Queen of Sheba's palace and the legendary tombs of ancient kings. Visit St. Mary of Zion Church, where Ethiopian tradition holds that the Ark of the Covenant resides in a chapel. Wander through archaeological sites revealing the grandeur of the Axumite Empire, which once dominated trade routes across the Red Sea. See the ancient inscriptions in Ge'ez script, Ethiopia's classical language, and marvel at the engineering achievements of this ancient civilization. Axum offers a unique window into Ethiopia's glorious past, where history and legend intertwine to create one of Africa's most fascinating historical destinations.",
+    "imageCover": "axum1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Stela_aksum.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Stela_aksum.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Stela_aksum.jpg"
+      "axum2.jpg",
+      "axum3.jpg",
+      "axum4.jpg"
     ],
     "startLocation": {
-      "description": "Axum, Ethiopia",
+      "description": "Addis Ababa, Ethiopia",
       "type": "Point",
-      "coordinates": [38.72, 14.12],
-      "address": "Axum, Ethiopia"
+      "coordinates": [38.7469, 9.0303],
+      "address": "Addis Ababa, Ethiopia"
     },
     "startDates": ["2025-11-12T09:00:00.000Z", "2025-12-18T09:00:00.000Z"],
     "guides": ["5c8a22c62f8fb814b56fa18b", "5c8a201e2f8fb814b56fa186"],
@@ -233,18 +233,18 @@
     "ratingsAverage": 3.9,
     "ratingsQuantity": 7,
     "summary": "Explore the hottest and most surreal landscapes in Ethiopia",
-    "description": "Visit the Dallol sulfur springs, colorful salt flats, and lava lakes of the Danakil Depression.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Danakil_Landscape.jpg",
+    "description": "Begin your adventure from Addis Ababa to one of the world's most extreme environments - the Danakil Depression, the hottest place on Earth and one of the lowest points on the African continent. This otherworldly landscape looks like it belongs on another planet. Experience the dramatic sulfur springs of Dallol, where vibrant pools of green, yellow, and orange minerals create surreal abstract art against salt formations. Walk across vast salt flats where the Afar people still extract salt using traditional methods unchanged for centuries. Hike to the top of Erta Ale, Ethiopia's active volcano with one of only five permanent lava lakes in the world, and watch molten lava bubble and glow beneath you at night. The Danakil Depression combines extreme natural forces with ancient cultures, offering an adventure that challenges body and spirit. Meet the resilient Afar people, learn about their nomadic way of life, and witness one of nature's most spectacular displays. This is not a tour for the faint-hearted, but an expedition for those seeking truly extraordinary experiences.",
+    "imageCover": "danakil1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Danakil_Landscape.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Danakil_Landscape.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Danakil_Landscape.jpg"
+      "danakil2.jpg",
+      "danakil3.jpg",
+      "danakil4.jpg"
     ],
     "startLocation": {
-      "description": "Semera, Ethiopia",
+      "description": "Addis Ababa, Ethiopia",
       "type": "Point",
-      "coordinates": [40.613, 12.454],
-      "address": "Semera, Ethiopia"
+      "coordinates": [38.7469, 9.0303],
+      "address": "Addis Ababa, Ethiopia"
     },
     "startDates": ["2025-11-20T09:00:00.000Z", "2025-12-25T09:00:00.000Z"],
     "guides": ["5c8a21f22f8fb814b56fa18a", "5c8a1f292f8fb814b56fa184"],
@@ -282,18 +282,18 @@
     "ratingsAverage": 4.8,
     "ratingsQuantity": 6,
     "summary": "Hiking and wildlife exploration in Bale Mountains",
-    "description": "Observe Ethiopian wolves, scenic waterfalls, and high-altitude plateaus.",
-    "imageCover": "https://commons.wikimedia.org/wiki/Special:FilePath/Bale_Mountns.jpg",
+    "description": "Depart from Addis Ababa to the Bale Mountains National Park, a pristine wilderness area home to the largest remaining population of Ethiopian wolves and countless other endemic species. This mountain range offers exceptional trekking through diverse ecosystems from afro-alpine moorlands to lush Harenna Forest. Hike across the Sanetti Plateau, the largest alpine plateau in Africa, reaching altitudes over 4,000 meters with spectacular views of the surrounding landscapes. Encounter Ethiopia's most iconic predators, the charismatic Ethiopian wolf, in their natural habitat - this is one of the best places in the world to observe these endangered canids. Explore the dramatic Gaysay Valley, watch endemic birds like the thick-billed raven and Ethiopian siskin, and visit scenic waterfalls cascading through mossy forests. The Harenna Forest provides excellent opportunities for bird watching with its diverse canopy and forest floor ecosystems. This tour combines challenging treks with wildlife spotting, offering adventurers a chance to explore one of Ethiopia's most biodiverse regions while contributing to the conservation of some of Africa's most unique wildlife.",
+    "imageCover": "bale1.jpg",
     "images": [
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bale_Mountns.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bale_Mountns.jpg",
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Bale_Mountns.jpg"
+      "bale2.jpg",
+      "bale3.jpg",
+      "bale4.jpg"
     ],
     "startLocation": {
-      "description": "Bale, Ethiopia",
+      "description": "Addis Ababa, Ethiopia",
       "type": "Point",
-      "coordinates": [39.9973, 6.9833],
-      "address": "Bale, Ethiopia"
+      "coordinates": [38.7469, 9.0303],
+      "address": "Addis Ababa, Ethiopia"
     },
     "startDates": ["2025-11-18T09:00:00.000Z", "2025-12-22T09:00:00.000Z"],
     "guides": ["5c8a21d02f8fb814b56fa189", "5c8a1f292f8fb814b56fa184"],

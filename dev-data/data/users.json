@@ -46,8 +46,8 @@
   },
   {
     "_id": "5c8a1f4e2f8fb814b56fa185",
-    "name": "Selamawit Bekele",
-    "email": "selamawit.bekele@example.com",
+    "name": "Selamu Bekele",
+    "email": "selamu.bekele@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-6.jpg",
@@ -55,8 +55,8 @@
   },
   {
     "_id": "5c8a201e2f8fb814b56fa186",
-    "name": "Lulit Desta",
-    "email": "lulit.desta@example.com",
+    "name": "Lul Tewodros",
+    "email": "lul.tewodros@example.com",
     "role": "guide",
     "active": true,
     "photo": "user-7.jpg",
@@ -100,8 +100,8 @@
   },
   {
     "_id": "5c8a22c62f8fb814b56fa18b",
-    "name": "Muluwork Solomon",
-    "email": "muluwork.solomon@example.com",
+    "name": "Muluken Solomon",
+    "email": "muluken.solomon@example.com",
     "role": "lead-guide",
     "active": true,
     "photo": "user-12.jpg",
