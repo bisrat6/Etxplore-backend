@@ -14,15 +14,35 @@ const app = require('./app');
 // Prefer a hosted DATABASE env var, fall back to local connection string
 const DB = process.env.DATABASE || process.env.DATABASE_LOCAL;
 
+// Debug logging
+console.log('\n🔍 Environment Check:');
+console.log('DATABASE env var exists:', !!process.env.DATABASE);
+console.log('DATABASE_LOCAL env var exists:', !!process.env.DATABASE_LOCAL);
+console.log('All env vars:', Object.keys(process.env).join(', '));
+
+if (!DB) {
+  console.error('\n❌ FATAL ERROR: DATABASE environment variable is not set!');
+  console.error('\n📝 SOLUTION: Add environment variables to your deployment platform:');
+  console.error('\nRequired variables:');
+  console.error('  DATABASE=<your_mongodb_connection_string>');
+  console.error('  NODE_ENV=production');
+  console.error('  JWT_SECRET=<your_jwt_secret>');
+  console.error('  GMAIL_USER=<your_gmail>');
+  console.error('  GMAIL_APP_PASSWORD=<your_app_password>');
+  console.error('  ... and others');
+  console.error('\nSee DEPLOYMENT.md for full list.\n');
+  process.exit(1);
+}
+
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false
   })
-  .then(() => console.log('DB connection successful!'))
+  .then(() => console.log('✅ DB connection successful!'))
   .catch(err => {
-    console.error('DB connection error:', err);
+    console.error('❌ DB connection error:', err.message);
     process.exit(1);
   });
 
