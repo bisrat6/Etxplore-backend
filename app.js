@@ -29,15 +29,22 @@ const allowedOrigins = process.env.FRONTEND_URL
       'http://127.0.0.1:8080'
     ];
 
+// Log allowed origins for debugging
+console.log('🌐 CORS - Allowed origins:', allowedOrigins);
+
 app.use(
   cors({
     origin: function(origin, callback) {
       // Allow requests with no origin like mobile apps or curl
       if (!origin) return callback(null, true);
+      
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
-        callback(new Error('CORS policy: This origin is not allowed.'));
+        // Log blocked origin but don't throw error - allow in production for now
+        console.log('⚠️  CORS: Request from origin not in whitelist:', origin);
+        // Temporarily allow all origins until frontend is deployed
+        callback(null, true);
       }
     },
     credentials: true,
