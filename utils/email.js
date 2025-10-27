@@ -11,13 +11,21 @@ module.exports = class Email {
   }
 
   newTransport() {
-    // Gmail SMTP configuration
+    // Gmail SMTP configuration with explicit settings
     return nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD
-      }
+      },
+      tls: {
+        rejectUnauthorized: false
+      },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 10000
     });
   }
 
@@ -31,7 +39,16 @@ module.exports = class Email {
     });
 
     // 2) Send email using Gmail via Nodemailer
+    console.log('📧 Attempting to send email to:', this.to);
+    console.log('📧 Using Gmail account:', process.env.GMAIL_USER);
+    
     try {
+      const transporter = this.newTransport();
+      
+      // Verify connection configuration
+      await transporter.verify();
+      console.log('✅ SMTP connection verified');
+      
       const mailOptions = {
         from: `"Etxplore" <${this.from}>`,
         to: this.to,
@@ -40,13 +57,16 @@ module.exports = class Email {
         text: htmlToText.convert(html)
       };
       
-      const info = await this.newTransport().sendMail(mailOptions);
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Email sent successfully:', info.messageId);
       
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('✅ Email sent successfully:', info.messageId);
-      }
+      return info;
     } catch (error) {
-      console.error('❌ Email sending failed:', error.message);
+      console.error('❌ Email sending failed:', {
+        message: error.message,
+        code: error.code,
+        command: error.command
+      });
       throw error;
     }
   }
