@@ -33,6 +33,22 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     return name.slice(0, maxLength - 3) + '...';
   };
 
+  // Construct callback URL - use BACKEND_URL env var in production for reliability
+  let backendBase = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
+  
+  // Force HTTPS in production (Render always uses HTTPS)
+  if (process.env.NODE_ENV === 'production' && backendBase.startsWith('http://')) {
+    backendBase = backendBase.replace('http://', 'https://');
+    console.log('⚠️ Corrected HTTP to HTTPS for production');
+  }
+  
+  const callbackUrl = `${backendBase}/api/v1/bookings/verify/${txRef}`;
+  
+  console.log('🔗 Callback URL:', callbackUrl);
+  console.log('🌐 Backend base:', backendBase);
+  console.log('📍 Request protocol:', req.protocol);
+  console.log('🏠 Request host:', req.get('host'));
+
   const payload = {
     amount: String(tour.price), // Chapa expects string amount
     currency: 'ETB',
@@ -41,9 +57,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     last_name: (req.user.name || '').split(' ')[1] || 'User',
     tx_ref: txRef,
     phone_number: req.user.phone || '0912345678',
-    callback_url: `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/bookings/verify/${txRef}`,
+    callback_url: callbackUrl,
     return_url: returnUrl,
     // Chapa has strict length limits on customization fields
     customization: {
@@ -126,7 +140,14 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 exports.verifyPayment = catchAsync(async (req, res, next) => {
   const { tx_ref: txRefParam } = req.params;
 
-  console.log('🔍 Verifying payment for txRef:', txRefParam);
+  console.log('==================================================');
+  console.log('🔍 VERIFY PAYMENT CALLBACK RECEIVED');
+  console.log('==================================================');
+  console.log('📅 Timestamp:', new Date().toISOString());
+  console.log('🔑 txRef:', txRefParam);
+  console.log('📍 Request IP:', req.ip || req.connection.remoteAddress);
+  console.log('🌐 Request headers:', JSON.stringify(req.headers, null, 2));
+  console.log('==================================================');
 
   const verifyUrl = `https://api.chapa.co/v1/transaction/verify/${txRefParam}`;
   try {

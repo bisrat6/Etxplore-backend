@@ -23,6 +23,9 @@ DATABASE_LOCAL=mongodb://localhost:27017/etxplore
 # Frontend URL
 FRONTEND_URL=http://localhost:8080
 
+# Backend URL (Required for production Chapa callbacks)
+BACKEND_URL=https://your-backend-url.onrender.com
+
 # JWT
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=90d
