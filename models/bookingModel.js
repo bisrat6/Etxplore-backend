@@ -13,7 +13,7 @@ const bookingSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    require: [true, 'Booking must have a price.']
+    required: [true, 'Booking must have a price.']
   },
   txRef: {
     type: String,
@@ -23,7 +23,7 @@ const bookingSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   paid: {
     type: Boolean,

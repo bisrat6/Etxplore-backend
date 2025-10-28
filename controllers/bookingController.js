@@ -157,11 +157,17 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
           if (txRef) bookingData.txRef = txRef;
 
           console.log('📝 Creating new booking:', bookingData);
-          const booking = await Booking.create(bookingData);
-          console.log('✅ Booking created successfully:', booking._id);
-          return res
-            .status(200)
-            .json({ status: 'success', booking, raw: data });
+          try {
+            const booking = await Booking.create(bookingData);
+            console.log('✅ Booking created successfully:', booking._id);
+            return res
+              .status(200)
+              .json({ status: 'success', booking, raw: data });
+          } catch (createError) {
+            console.error('❌ Error creating booking:', createError.message);
+            console.error('Booking data:', bookingData);
+            return next(new AppError(`Failed to create booking: ${createError.message}`, 500));
+          }
         }
         
         console.log('✅ Found existing booking by tour/user/price');

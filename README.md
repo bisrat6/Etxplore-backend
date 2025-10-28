@@ -1,191 +1,142 @@
 # Etxplore Backend API
 
-A RESTful API for the Etxplore tourism application, built with Node.js, Express, and MongoDB.
+Backend API for the Etxplore travel booking platform.
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js >= 16.0.0
-- MongoDB (local or MongoDB Atlas)
-- npm or yarn
-
 ### Installation
-
 ```bash
-# Install dependencies
 npm install
-
-# Configure environment variables
-cp config.env.example config.env
-# Edit config.env with your settings
-
-# Start development server
-npm run dev
-
-# Start production server
-npm start
 ```
 
 ### Environment Variables
-
-Create a `config.env` file in the backend directory with:
+Create a `config.env` file with the following variables:
 
 ```env
 NODE_ENV=development
 PORT=3000
-DATABASE=mongodb+srv://username:password@cluster.mongodb.net/etxplore
+
+# Database
+DATABASE=mongodb+srv://...
+DATABASE_LOCAL=mongodb://localhost:27017/etxplore
+
+# Frontend URL
+FRONTEND_URL=http://localhost:8080
+
+# JWT
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=90d
 JWT_COOKIE_EXPIRES_IN=90
 
-GMAIL_USER=your_email@gmail.com
+# Email (Optional - currently auto-verify users)
+GMAIL_USER=your-email@gmail.com
 GMAIL_APP_PASSWORD=your-app-password
-EMAIL_FROM=your_email@gmail.com
+EMAIL_FROM=your-email@gmail.com
 
-CHAPA_SECRET_KEY=your_chapa_key
-FRONTEND_URL=http://localhost:8080
+# Payment
+CHAPA_SECRET_KEY=your-chapa-key
 ```
 
-## 📚 API Documentation
-
-### Base URL
-```
-http://localhost:3000/api/v1
-```
-
-### Endpoints
-
-#### Tours
-- `GET /api/v1/tours` - Get all tours
-- `GET /api/v1/tours/:id` - Get single tour
-- `POST /api/v1/tours` - Create tour (Admin only)
-- `PATCH /api/v1/tours/:id` - Update tour (Admin only)
-- `DELETE /api/v1/tours/:id` - Delete tour (Admin only)
-
-#### Users
-- `POST /api/v1/users/signup` - Register new user
-- `POST /api/v1/users/login` - Login user
-- `POST /api/v1/users/logout` - Logout user
-- `POST /api/v1/users/forgotPassword` - Request password reset
-- `PATCH /api/v1/users/resetPassword/:token` - Reset password
-- `PATCH /api/v1/users/updatePassword` - Update password
-- `GET /api/v1/users/me` - Get current user
-- `PATCH /api/v1/users/updateMe` - Update current user
-
-#### Reviews
-- `GET /api/v1/reviews` - Get all reviews
-- `POST /api/v1/reviews` - Create review
-- `GET /api/v1/reviews/:id` - Get single review
-
-#### Bookings
-- `POST /api/v1/bookings` - Create booking
-- `GET /api/v1/bookings` - Get user bookings
-
-## 🔐 Authentication
-
-Most endpoints require authentication via JWT.
-
-**Register:**
+### Run Development Server
 ```bash
-POST /api/v1/users/signup
-Body: { "name", "email", "password", "passwordConfirm" }
+npm run dev
 ```
 
-**Login:**
+### Run Production Server
 ```bash
-POST /api/v1/users/login
-Body: { "email", "password" }
-Response: Returns JWT token
+npm start
 ```
 
-**Authenticated Requests:**
-Include the JWT in the Authorization header:
-```
-Authorization: Bearer YOUR_JWT_TOKEN
-```
+## 📋 Features
 
-## 🛠️ Development
+- ✅ User authentication & authorization (auto-verified users)
+- ✅ Tour management (CRUD operations)
+- ✅ Booking system (Chapa payment integration)
+- ✅ Review system
+- ✅ Email verification (preserved code, currently disabled)
+- ✅ Password reset
+- ✅ Security middleware (helmet, rate limiting, etc.)
 
-### Scripts
+## 🔧 Key Configuration
 
-```bash
-npm run dev      # Start with nodemon (auto-reload)
-npm start         # Start production server
-npm run start:prod # Start with NODE_ENV=production
-```
+### Auto-Verified Users
+Users are automatically verified on signup since email services are blocked. Original email verification code is preserved in comments in `controllers/authController.js`. See `HOW_TO_RESTORE_EMAIL_VERIFICATION.md` to re-enable email verification.
 
-### Project Structure
+### Bookings
+The booking system integrates with Chapa payment gateway. After successful payment, bookings are automatically created in the database.
+
+## 📁 Project Structure
 
 ```
 backend/
-├── controllers/     # Request handlers
-├── models/         # Database models
-├── routes/         # API routes
-├── utils/          # Utility functions
-├── views/          # Email templates
-├── public/         # Static files
-├── dev-data/      # Sample data
-└── config.env      # Environment variables
+├── controllers/    # Route controllers
+├── models/        # Database models
+├── routes/        # Route definitions
+├── utils/         # Utility functions
+├── views/         # Email templates
+├── public/        # Static files
+└── server.js      # Entry point
 ```
 
-## 🔒 Security Features
+## 🐛 Recent Fixes
 
-- ✅ Password hashing with bcrypt
-- ✅ JWT authentication
-- ✅ Rate limiting (1000 req/hour)
-- ✅ HTTP security headers (Helmet)
-- ✅ XSS protection
-- ✅ MongoDB injection protection
-- ✅ Parameter pollution prevention
-- ✅ CORS configuration
+### Critical Booking Bug (FIXED)
+- Fixed typo in booking model: `require` → `required`
+- Fixed Date.now() usage: `Date.now()` → `Date.now`
+- Added comprehensive error handling
+- Added detailed logging for debugging
 
-## 📧 Email Service
+## 📝 Important Notes
 
-The API uses Gmail SMTP for sending emails:
+### To Restore Email Verification
+See `HOW_TO_RESTORE_EMAIL_VERIFICATION.md` when email services are available.
 
-- Welcome emails after registration
-- Email verification
-- Password reset tokens
+### Migration Scripts
+- `npm run migrate:verify` - Verify all existing users
 
-**Configuration:**
-1. Enable 2-Step Verification in Google Account
-2. Generate App Password: https://myaccount.google.com/apppasswords
-3. Add to `config.env`: `GMAIL_APP_PASSWORD`
+## 🔗 API Endpoints
 
-## 🚀 Deployment
+### Authentication
+- `POST /api/v1/users/signup` - Register new user
+- `POST /api/v1/users/login` - Login
+- `POST /api/v1/users/forgotPassword` - Request password reset
+- `PATCH /api/v1/users/resetPassword/:token` - Reset password
 
-See `DEPLOYMENT.md` for detailed deployment instructions.
+### Tours
+- `GET /api/v1/tours` - Get all tours
+- `GET /api/v1/tours/:id` - Get single tour
+- `POST /api/v1/tours` - Create tour (protected)
+- `PATCH /api/v1/tours/:id` - Update tour (protected)
+- `DELETE /api/v1/tours/:id` - Delete tour (protected)
 
-Quick deployment options:
-- **Heroku** - Easiest, best for quick deployment
-- **Railway** - Modern platform with GitHub integration
-- **DigitalOcean** - Scalable and reliable
-- **VPS** - Full control and cost-effective
+### Bookings
+- `GET /api/v1/bookings/checkout-session/:tourId` - Create checkout session
+- `GET /api/v1/bookings/verify/:tx_ref` - Verify payment
+- `GET /api/v1/bookings/me` - Get user bookings
 
-## 📝 Testing
+### Reviews
+- `GET /api/v1/reviews` - Get all reviews
+- `POST /api/v1/reviews` - Create review (protected)
+- `PATCH /api/v1/reviews/:id` - Update review (protected)
+- `DELETE /api/v1/reviews/:id` - Delete review (protected)
 
-```bash
-# Test API endpoints (use Postman or curl)
-curl http://localhost:3000/api/v1/tours
-```
+## 🚢 Deployment
 
-## 🤝 Contributing
+### Render.com
+1. Set start command to: `node server.js`
+2. Add all environment variables
+3. Ensure Node.js version is set to 20.x in package.json
+4. Deploy!
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+### Environment Variables in Production
+Make sure to set:
+- `DATABASE` - MongoDB connection string
+- `NODE_ENV=production`
+- `FRONTEND_URL` - Your frontend URL
+- All other required variables
 
 ## 📄 License
-
 ISC
 
 ## 👤 Author
-
 Bisrat Beriso
-
----
-
-For detailed deployment instructions, see `DEPLOYMENT.md`.
-For deployment checklist, see `DEPLOYMENT_CHECKLIST.md`.
-
