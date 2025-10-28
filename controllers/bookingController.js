@@ -76,9 +76,18 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     
     if (data.status !== 'success') {
       console.error('❌ Chapa API Error:', JSON.stringify(data, null, 2));
-      return next(
-        new AppError(data.message || 'Chapa failed to initialize payment', 400)
-      );
+      
+      // Handle message being an object, array, or string
+      let errorMessage = 'Chapa failed to initialize payment';
+      if (data.message) {
+        if (typeof data.message === 'string') {
+          errorMessage = data.message;
+        } else if (typeof data.message === 'object') {
+          errorMessage = JSON.stringify(data.message);
+        }
+      }
+      
+      return next(new AppError(errorMessage, 400));
     }
 
     // 4️⃣ Respond to frontend with Chapa checkout URL
@@ -97,8 +106,20 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     console.error('Response:', JSON.stringify(respData, null, 2));
     console.error('Error message:', err.message);
     
-    // Return more specific error message
-    const errorMessage = respData?.message || err.message || 'Payment initialization failed';
+    // Handle message being an object, array, or string
+    let errorMessage = 'Payment initialization failed';
+    
+    if (respData?.message) {
+      if (typeof respData.message === 'string') {
+        errorMessage = respData.message;
+      } else if (typeof respData.message === 'object') {
+        // Convert object/array to readable string
+        errorMessage = JSON.stringify(respData.message);
+      }
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     return next(new AppError(errorMessage, 400));
   }
 });
@@ -207,76 +228,6 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
       );
     }
     return next(new AppError('Verification failed', 400));
-  }
-});
-
-exports.createBookingManually = catchAsync(async (req, res, next) => {
-  const { tourId, txRef } = req.body;
-
-  console.log('📝 Manual booking creation:', { tourId, txRef, userId: req.user._id });
-
-  if (!tourId) {
-    return next(new AppError('Tour ID is required', 400));
-  }
-
-  // Get the tour to get the price
-  const tour = await Tour.findById(tourId);
-  if (!tour) {
-    return next(new AppError('Tour not found', 404));
-  }
-
-  // Check if booking already exists
-  if (txRef) {
-    const existingByTx = await Booking.findOne({ txRef });
-    if (existingByTx) {
-      console.log('✅ Booking already exists by txRef');
-      return res.status(200).json({
-        status: 'success',
-        booking: existingByTx
-      });
-    }
-  }
-
-  // Check by tour/user combination
-  const existingBooking = await Booking.findOne({
-    tour: tourId,
-    user: req.user._id,
-    price: tour.price
-  });
-
-  if (existingBooking) {
-    console.log('✅ Booking already exists by tour/user/price');
-    return res.status(200).json({
-      status: 'success',
-      booking: existingBooking
-    });
-  }
-
-  // Create new booking
-  const bookingData = {
-    tour: tourId,
-    user: req.user._id,
-    price: tour.price,
-    paid: true
-  };
-  
-  if (txRef) {
-    bookingData.txRef = txRef;
-  }
-
-  console.log('📝 Creating booking:', bookingData);
-  
-  try {
-    const booking = await Booking.create(bookingData);
-    console.log('✅ Booking created successfully:', booking._id);
-    
-    res.status(201).json({
-      status: 'success',
-      booking
-    });
-  } catch (error) {
-    console.error('❌ Error creating booking:', error.message);
-    return next(new AppError(`Failed to create booking: ${error.message}`, 500));
   }
 });
 
