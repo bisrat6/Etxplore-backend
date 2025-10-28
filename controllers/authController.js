@@ -199,9 +199,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     : 'http://localhost:8080';
   const resetURL = `${resetFrontend}/reset-password/${resetToken}`;
 
-  // Log the reset URL for debugging
-  console.log('Password reset URL:', resetURL);
-
   res.status(200).json({
     status: 'success',
     message: 'Password reset token generated. Check server logs or implement alternative notification.',
