@@ -63,7 +63,11 @@ npm start
 Users are automatically verified on signup since email services are blocked. Original email verification code is preserved in comments in `controllers/authController.js`. See `HOW_TO_RESTORE_EMAIL_VERIFICATION.md` to re-enable email verification.
 
 ### Bookings
-The booking system integrates with Chapa payment gateway. After successful payment, bookings are automatically created in the database.
+The booking system integrates with Chapa payment gateway. 
+
+**Recommended Approach:** After successful payment, the frontend should call `POST /api/v1/bookings/create` to manually create the booking. This is more reliable than relying on Chapa's callback.
+
+See `BOOKING_SOLUTION.md` for complete frontend integration guide.
 
 ## 📁 Project Structure
 
@@ -120,7 +124,8 @@ See `HOW_TO_RESTORE_EMAIL_VERIFICATION.md` when email services are available.
 
 ### Bookings
 - `GET /api/v1/bookings/checkout-session/:tourId` - Create checkout session
-- `GET /api/v1/bookings/verify/:tx_ref` - Verify payment
+- `GET /api/v1/bookings/verify/:tx_ref` - Verify payment (Chapa callback)
+- `POST /api/v1/bookings/create` - **Create booking manually (Recommended)**
 - `GET /api/v1/bookings/me` - Get user bookings
 
 ### Reviews
