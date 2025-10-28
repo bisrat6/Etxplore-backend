@@ -80,11 +80,20 @@ backend/
 
 ## 🐛 Recent Fixes
 
-### Critical Booking Bug (FIXED)
-- Fixed typo in booking model: `require` → `required`
-- Fixed Date.now() usage: `Date.now()` → `Date.now`
-- Added comprehensive error handling
-- Added detailed logging for debugging
+### Critical Booking Bugs (FIXED)
+1. **Booking Model Validation**
+   - Fixed typo in booking model: `require` → `required`
+   - Fixed Date.now() usage: `Date.now()` → `Date.now`
+
+2. **Long Tour Names Payment Issue**
+   - Fixed: Truncate tour names in Chapa payload to respect length limits
+   - Title: max 16 characters
+   - Description: max 80 characters
+   - Added better error logging for Chapa API errors
+
+3. **Error Handling**
+   - Added comprehensive error handling throughout booking flow
+   - Added detailed logging for debugging payment issues
 
 ## 📝 Important Notes
 

@@ -26,6 +26,13 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     : 'http://localhost:8080';
   const returnUrl = `${frontendBase}/my-bookings`;
 
+  // Truncate tour name for Chapa fields (Chapa has strict length limits)
+  const truncateTourName = (name, maxLength) => {
+    if (!name) return 'Tour';
+    if (name.length <= maxLength) return name;
+    return name.slice(0, maxLength - 3) + '...';
+  };
+
   const payload = {
     amount: String(tour.price), // Chapa expects string amount
     currency: 'ETB',
@@ -38,18 +45,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       'host'
     )}/api/v1/bookings/verify/${txRef}`,
     return_url: returnUrl,
-    // Chapa limits customization.title to 16 characters; make a safe truncated title
+    // Chapa has strict length limits on customization fields
     customization: {
-      title: (() => {
-        const MAX = 16;
-        const SUFFIX = ' Pay'; // keeps title short but meaningful
-        const namePart = (tour.name || 'Tour').slice(
-          0,
-          Math.max(0, MAX - SUFFIX.length)
-        );
-        return `${namePart}${SUFFIX}`;
-      })(),
-      description: `Booking payment for ${tour.name}`
+      title: truncateTourName(tour.name, 16), // Max 16 characters
+      description: `Booking for ${truncateTourName(tour.name, 80)}` // Max ~100 chars safe
     },
     meta: {
       hide_receipt: true, // include identifiers so verify can create booking reliably
@@ -59,6 +58,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     }
   };
 
+  console.log('📦 Chapa payload:', {
+    ...payload,
+    customization: payload.customization
+  });
+
   // No server-side pending record is created here. We rely on Chapa's
   // verification callback to provide sufficient meta to create the booking.
 
@@ -67,11 +71,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       headers: { Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}` }
     });
     const { data } = response;
+    
+    console.log('📨 Chapa response status:', data.status);
+    
     if (data.status !== 'success') {
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.error('Chapa API Error:', data);
-      }
+      console.error('❌ Chapa API Error:', JSON.stringify(data, null, 2));
       return next(
         new AppError(data.message || 'Chapa failed to initialize payment', 400)
       );
@@ -87,11 +91,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   } catch (err) {
     const respData =
       err && err.response && err.response.data ? err.response.data : null;
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error('Chapa Error:', respData || (err && err.message) || err);
-    }
-    return next(new AppError('Payment initialization failed', 400));
+    
+    console.error('❌ Chapa initialization error:');
+    console.error('Status:', err.response?.status);
+    console.error('Response:', JSON.stringify(respData, null, 2));
+    console.error('Error message:', err.message);
+    
+    // Return more specific error message
+    const errorMessage = respData?.message || err.message || 'Payment initialization failed';
+    return next(new AppError(errorMessage, 400));
   }
 });
 exports.verifyPayment = catchAsync(async (req, res, next) => {
