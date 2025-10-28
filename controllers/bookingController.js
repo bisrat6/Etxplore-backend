@@ -91,8 +91,6 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 exports.verifyPayment = catchAsync(async (req, res, next) => {
   const { tx_ref: txRefParam } = req.params;
 
-  console.log('🔍 Verifying payment for tx_ref:', txRefParam);
-
   const verifyUrl = `https://api.chapa.co/v1/transaction/verify/${txRefParam}`;
   try {
     const response = await axios.get(verifyUrl, {
@@ -100,12 +98,10 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
     });
 
     const { data } = response;
-    console.log('📦 Chapa response:', JSON.stringify(data, null, 2));
 
     // When payment is successful create booking in DB
     const txn = data && data.data ? data.data : null;
     const txnStatus = txn && txn.status;
-    console.log('💳 Transaction status:', txnStatus);
 
     // Chapa uses different strings; treat 'success' or 'paid' as paid states
     if (txnStatus === 'success' || txnStatus === 'paid') {
@@ -116,15 +112,12 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
       const amount = txn.amount || meta.price || null;
 
       if (tourId && userId) {
-        console.log('✅ Creating booking:', { tourId, userId, amount });
-        
         // Prefer dedupe by transaction reference if available
         const txRef = txn.tx_ref || txn.txRef || txRefParam || null;
 
         if (txRef) {
           const existingByTx = await Booking.findOne({ txRef });
           if (existingByTx) {
-            console.log('📌 Found existing booking by txRef:', existingByTx._id);
             return res
               .status(200)
               .json({ status: 'success', booking: existingByTx, raw: data });
@@ -147,12 +140,10 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
           if (txRef) bookingData.txRef = txRef;
 
           const booking = await Booking.create(bookingData);
-          console.log('✨ New booking created:', booking._id);
           return res
             .status(200)
             .json({ status: 'success', booking, raw: data });
         }
-        console.log('📌 Found existing booking:', existing._id);
         return res
           .status(200)
           .json({ status: 'success', booking: existing, raw: data });
@@ -184,9 +175,7 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
 
 exports.getMyBookings = catchAsync(async (req, res, next) => {
   // returns bookings for the authenticated user
-  console.log('📚 Fetching bookings for user:', req.user._id);
   const bookings = await Booking.find({ user: req.user._id });
-  console.log('📚 Found', bookings.length, 'bookings');
   res
     .status(200)
     .json({ status: 'success', results: bookings.length, data: bookings });

@@ -37,6 +37,24 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  // ========================================
+  // TEMPORARY: Auto-verify users (email services not working)
+  // ========================================
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    isVerified: true // Auto-verify users temporarily
+  });
+
+  // Auto-login user after signup
+  createSendToken(newUser, 201, res);
+
+  // ========================================
+  // ORIGINAL EMAIL VERIFICATION CODE (Commented out - restore when email works)
+  // ========================================
+  /*
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -68,6 +86,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     status: 'success',
     message: 'User created. Verification email sent.'
   });
+  */
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -84,7 +103,14 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  // Check if email is verified
+  // ========================================
+  // TEMPORARY: Skip email verification check - all users are auto-verified
+  // ========================================
+
+  // ========================================
+  // ORIGINAL EMAIL VERIFICATION CHECK (Commented out - restore when email works)
+  // ========================================
+  /*
   // Check if email is verified.
   // If user has an email verification token it means they need to verify.
   // Allow legacy users (no verification token present) to log in.
@@ -93,6 +119,7 @@ exports.login = catchAsync(async (req, res, next) => {
       new AppError('Please verify your email before logging in.', 401)
     );
   }
+  */
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
@@ -164,6 +191,27 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
+  // ========================================
+  // TEMPORARY: Return token directly (email not working)
+  // ========================================
+  const resetFrontend = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.replace(/\/$/, '')
+    : 'http://localhost:8080';
+  const resetURL = `${resetFrontend}/reset-password/${resetToken}`;
+
+  // Log the reset URL for debugging
+  console.log('Password reset URL:', resetURL);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Password reset token generated. Check server logs or implement alternative notification.',
+    resetToken: process.env.NODE_ENV === 'development' ? resetToken : undefined
+  });
+
+  // ========================================
+  // ORIGINAL EMAIL SENDING CODE (Commented out - restore when email works)
+  // ========================================
+  /*
   // 3) Send it to user's email
   // Use frontend reset URL built from FRONTEND_URL or fallback
   const resetFrontend = process.env.FRONTEND_URL
@@ -188,6 +236,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       500
     );
   }
+  */
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {

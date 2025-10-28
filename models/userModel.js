@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
   emailVerificationExpires: Date,
   isVerified: {
     type: Boolean,
-    default: false
+    default: true // TEMPORARY: Auto-verify all users (email not working). Original was: false
   },
   active: {
     type: Boolean,
